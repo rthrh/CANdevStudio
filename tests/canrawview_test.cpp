@@ -5,14 +5,11 @@
 #include <fakeit.hpp>
 #include <../src/components/canrawview/gui/crvguiinterface.h>
 #include <../src/components/canrawview/crvfactoryinterface.h>
-//#include <gui/crvguiinterface.h>
 #include <memory>
-//#include <newlinemanager.h>
-#include <iostream>
 
 using namespace fakeit;
 
-TEST_CASE("Frame received", "[canrawview]")
+TEST_CASE("Init table", "[canrawview]")
 {
 
     Mock<CRVGuiInterface> crvMock;
@@ -22,21 +19,21 @@ TEST_CASE("Frame received", "[canrawview]")
     Fake(Dtor(crvMock));
 
 
-
-//crvfactoryinterface
-
-    Fake(Dtor(crvMock));
-
-
-
     When(Method(crvMock, frameView)).Do([&]() {std::cout << "chuj dupa" << std::endl; });
-    //When(Method(crsMock, setRemoveCbk))
-    //Fake(Method(crsMock, setDockUndockCbk));
-    //Fake(Method(crsMock, getMainWidget));
-    //Fake(Method(crsMock, initTableView));
-    //When(Method(crsMock, getSelectedRows))
-    //Fake(Method(crsMock, setIndexWidget));
 
+    Fake(Method(crvMock, setClearCbk));
+    Fake(Method(crvMock, setDockUndockCbk));
+    Fake(Method(crvMock, setSectionClikedCbk));
+    Fake(Method(crvMock, setFilterCbk));
+    Fake(Method(crvMock, setModel));
+    Fake(Method(crvMock, initTableView));
+    Fake(Method(crvMock, isViewFrozen));
+    Fake(Method(crvMock, scrollToBottom));
+    Fake(Method(crvMock, getSortOrder));
+    Fake(Method(crvMock, getClickedColumn));
+    Fake(Method(crvMock, setSorting));
+    Fake(Method(crvMock, getWindowTitle));
+    Fake(Method(crvMock, isColumnHidden));
 }
 
 
