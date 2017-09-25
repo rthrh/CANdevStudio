@@ -4,6 +4,7 @@
 #include <QItemDelegate>
 #include <QRegExpValidator>
 #include <QStyledItemDelegate>
+#include <log.h>
 
 EditDelegate::EditDelegate(QAbstractItemModel* model = 0, CanRawSender* q = 0, QWidget* parent = 0)
     : canRawSender(q)
@@ -17,6 +18,7 @@ QWidget* EditDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem&
     if (index.column() == 4) // checkbox
     {
         QCheckBox* checkBox = new QCheckBox(parent);
+        // QWidget* qwidget = new QWidget(parent);
         return checkBox;
     } else if (index.column() == 5) { // send button
         CRS_SendButton* pushButton = new CRS_SendButton(index.row(), parent);
@@ -42,9 +44,9 @@ void EditDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, cons
     {
         QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
         if (checkBox->isChecked() == true) {
-            model->setData(index, QVariant::fromValue(true));
+            model->setData(index, 1);
         } else {
-            model->setData(index, QVariant::fromValue(false));
+            model->setData(index, 0);
         }
     } else {
         QItemDelegate::setModelData(editor, model, index);
@@ -58,6 +60,10 @@ void EditDelegate::prepareFrame(int section) const
         = model->findItems(QString::number(section), Qt::MatchExactly, 0); // match send button index with rowID index
 
     QStandardItem* item = frameDataIndexList.takeLast();
+    if (item == nullptr) {
+        cds_error("No matching between send button and row ID!");
+    }
+
     int dataRow = item->row(); // real item index in model
 
     QModelIndex frameIndex = model->index(dataRow, 1);

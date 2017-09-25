@@ -67,32 +67,36 @@ void CanRawSenderPrivate::removeRowsSelectedByMouse()
 void CanRawSenderPrivate::addNewItem()
 {
     QList<QStandardItem*> list{};
-    list.append(new QStandardItem(QString::number(_rowID)));
+    list.append(new QStandardItem(QString::number(_rowID++)));
     list.append(new QStandardItem(QString::number(0)));
     list.append(new QStandardItem(QString::number(0)));
     list.append(new QStandardItem(QString::number(0)));
+
+    // QStandardItem* checkBoxItem = new QStandardItem(); //possible checkbox implementation
+    // checkBoxItem->setCheckable(true);
+    // checkBoxItem->setCheckState(Qt::Checked);
+    // list.append(checkBoxItem); // checkbox
 
     list.append(new QStandardItem(QString::number(0))); // checkbox
     list.append(new QStandardItem(QString::number(0))); // send button
 
     _tvModel.appendRow(list);
-    //auto newLine = std::make_unique<NewLineManager>(q_ptr, _simulationState, _nlmFactory);
-
     int lastRowIndex = _tvModel.rowCount() - 1;
     QModelIndex index1 = _sortModel.index(lastRowIndex, 4); // checkbox
     QModelIndex index2 = _sortModel.index(lastRowIndex, 5); // send button
     _ui.setWidgetPersistent(index1); // set widget always visible
     _ui.setWidgetPersistent(index2);
-    _rowID++;
 
+    /*
+    auto newLine = std::make_unique<NewLineManager>(q_ptr, _simulationState, _nlmFactory);
+    using It = NewLineManager::ColNameIterator;
+    for (NewLineManager::ColName ii : It{ NewLineManager::ColName::IdLine }) {
+        _ui.setIndexWidget(
+            _tvModel.index(_tvModel.rowCount() - 1, static_cast<int>(ii)), newLine->GetColsWidget(It{ ii }));
 
-//using It = NewLineManager::ColNameIterator;
-    //for (NewLineManager::ColName ii : It{ NewLineManager::ColName::IdLine }) {
-    //    _ui.setIndexWidget(
-    //        _tvModel.index(_tvModel.rowCount() - 1, static_cast<int>(ii)), newLine->GetColsWidget(It{ ii }));
-    //
-    //_lines.push_back(std::move(newLine));
-//	}
+    _lines.push_back(std::move(newLine));
+        }
+    */
 }
 /**
 *   @brief  Function sets current sort settings and calls actual sort function
